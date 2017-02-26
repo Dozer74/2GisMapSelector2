@@ -10,25 +10,25 @@ using GrymCore;
 
 namespace GisSelector
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         DataBase db = new DataBase();
         static Grym pGrymCore;
         static IBaseReference pBaseRef;
         static IBaseViewThread pBaseView;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
         }
 
         
-        private void Form1_Shown(object sender, EventArgs e)
+        private void IsMainFormDisplayed(object sender, EventArgs e)
         {
             Init2Gis();
             LoadSettings();
-            db = DeserializeDataBase("data.bin");
-            tbStreet.Focus();
+            db = DeserializeDatabase("data.bin");
+            StreetTextBox.Focus();
         }
 
         private void LoadSettings()
@@ -56,7 +56,7 @@ namespace GisSelector
             }
         }
 
-        DataBase DeserializeDataBase(string patch)
+        DataBase DeserializeDatabase(string patch)
         {
             if (!File.Exists("data.bin"))
             {
@@ -73,7 +73,7 @@ namespace GisSelector
 
         void SearchInDataBase(DataBase dataBase)
         {
-            if (tbNumber.Text == "" && tbStreet.Text == "")
+            if (NumberTextBox.Text == "" && StreetTextBox.Text == "")
                 return;
 
             if (dataBase==null)
@@ -85,8 +85,8 @@ namespace GisSelector
             var selection = pBaseView.Frame.Map.GetSelection("My_Sel", true);
             selection.Color = ColorToUInt(ps.SelectionColor);
 
-            var paternNumber = ConvertToPatern(tbNumber.Text);
-            var paternStreet = ConvertToPatern(tbStreet.Text);
+            var paternNumber = ConvertToPattern(NumberTextBox.Text);
+            var paternStreet = ConvertToPattern(StreetTextBox.Text);
 
             Regex rNum, rStreet;
             try
@@ -100,7 +100,7 @@ namespace GisSelector
                 return;
             }
 
-            listBox1.Items.Clear();
+            ResultListbox.Items.Clear();
             foreach (var city in dataBase.GetCities())
             {
                 foreach (var street in city.GetStreets().Where(s => rStreet.IsMatch(s.StreetName)))
@@ -109,9 +109,9 @@ namespace GisSelector
                     foreach (var number in street.GetBuildings().Where(number => rNum.IsMatch(number)))
                     {
                         if (city.Name != "Челябинск")
-                            listBox1.Items.Add(city.Name + ", " + street.StreetName + ", " + number);
+                            ResultListbox.Items.Add(city.Name + ", " + street.StreetName + ", " + number);
                         else
-                            listBox1.Items.Add(street.StreetName + ", " + number);
+                            ResultListbox.Items.Add(street.StreetName + ", " + number);
 
                         if (!ps.SelectionHouse) 
                             continue;
@@ -130,7 +130,7 @@ namespace GisSelector
             }
         }
 
-        private static string ConvertToPatern(string line)
+        private static string ConvertToPattern(string line)
         {
             line = line.Replace("*", ".*").Replace("?", ".?").Replace("+", ".+");
 
@@ -142,9 +142,12 @@ namespace GisSelector
         }
 
 
-        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void ResultListbox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            SelectOnMap(listBox1.SelectedItem.ToString());
+            if (ResultListbox.SelectedItem != null)
+            {
+                SelectOnMap(ResultListbox.SelectedItem.ToString());
+            }  
 
         }
 
@@ -158,13 +161,13 @@ namespace GisSelector
             var cmdLine = pBaseView.Factory.ParseCommandLine(cmdLineStr);
             pBaseView.ExecuteCommandLine(cmdLine);
         }
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void SearchButton_Click(object sender, EventArgs e)
         {
             SearchInDataBase(db);
-            tbStreet.Focus();
+            StreetTextBox.Focus();
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainForm_Closing(object sender, FormClosingEventArgs e)
         {
             ps.FormSize = Size;
             ps.Save();
@@ -175,16 +178,16 @@ namespace GisSelector
             return (uint)(((c.A << 24) | (c.R) | (c.G << 8) | c.B << 16) & 0xffffffffL);
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void ClearButton_Click(object sender, EventArgs e)
         {
-            listBox1.Items.Clear();
+            ResultListbox.Items.Clear();
             var sel = pBaseView.Frame.Map.GetSelection("My_Sel", true);
             sel.RemoveAllFeatures();
         }
 
 
 
-        private void MenuDataBaseUpdate_Click(object sender, EventArgs e)
+        private void DBUpdateMenu_Click(object sender, EventArgs e)
         {
             var ff = new UpdateForm(pBaseView);
             if (ff.ShowDialog() != DialogResult.OK)
@@ -254,12 +257,12 @@ namespace GisSelector
         }
         #endregion
 
-        private void textBox1_KeyUp(object sender, KeyEventArgs e)
+        private void NumberTextBox_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyData != Keys.Enter) return;
 
             SearchInDataBase(db);
-            tbStreet.Focus();
+            StreetTextBox.Focus();
         }
     }
 }

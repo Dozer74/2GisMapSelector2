@@ -1,14 +1,12 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace GisSelector
 {
     public class PlaceHolderTextBox : TextBox
     {
-        private string placeHolderText;
-
         private bool isPlaceHolder = true;
+        private string placeHolderText;
 
         public PlaceHolderTextBox()
         {
@@ -33,7 +31,7 @@ namespace GisSelector
             {
                 Text = PlaceHolderText;
                 ForeColor = Color.Gray;
-                Font = new Font(Font, FontStyle.Italic);
+                //Font = new Font(Font, FontStyle.Italic);
                 isPlaceHolder = true;
             }
         }
@@ -48,6 +46,12 @@ namespace GisSelector
                 Font = new Font(Font, FontStyle.Regular);
                 isPlaceHolder = false;
             }
+        }
+
+        public new string Text
+        {
+            get { return base.Text.Replace(PlaceHolderText, ""); }
+            set { base.Text = value; }
         }
     }
 }

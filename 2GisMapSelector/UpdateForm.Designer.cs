@@ -48,8 +48,7 @@ namespace GisSelector
             this.checkedListBox1.CheckOnClick = true;
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Items.AddRange(new object[] {
-            "Челябинск",
-            "Копейск"});
+            "Челябинск"});
             this.checkedListBox1.Location = new System.Drawing.Point(15, 25);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(203, 124);

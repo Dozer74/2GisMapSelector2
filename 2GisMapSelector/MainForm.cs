@@ -23,19 +23,18 @@ namespace GisSelector
         }
 
         
-        private void IsMainFormDisplayed(object sender, EventArgs e)
+        private void MainForm_Shown(object sender, EventArgs e)
         {
             Init2Gis();
             LoadSettings();
             db = DeserializeDatabase("data.bin");
-            StreetTextBox.Focus();
+            btnSearch.Focus();
         }
 
         private void LoadSettings()
         {
             ChangePosition(ps.FormPosition);
             TopMost = ps.FormStayOnTop;
-            Size = ps.FormSize;
             MenuSelectionHouse.Checked = ps.SelectionHouse;
         }
 
@@ -56,37 +55,38 @@ namespace GisSelector
             }
         }
 
-        DataBase DeserializeDatabase(string patch)
+        DataBase DeserializeDatabase(string path)
         {
-            if (!File.Exists("data.bin"))
+            if (!File.Exists(path))
             {
-                MessageBox.Show(Resources.BaseNotFoundMsg,
-                    @"Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Resources.BaseNotFoundMsg, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return null;
             }
+
             var bf = new BinaryFormatter();
-            Stream stream = File.OpenRead("data.bin");
+            Stream stream = File.OpenRead(path);
             var database = (DataBase)bf.Deserialize(stream);
             stream.Close();
             return database;
         }
 
-        void SearchInDataBase(DataBase dataBase)
+        void SearchInDataBase()
         {
-            if (NumberTextBox.Text == "" && StreetTextBox.Text == "")
+
+            if (tbNumber.Text == "" && tbStreet.Text == "")
                 return;
 
-            if (dataBase==null)
+            if (db==null)
             {
                 MessageBox.Show(Resources.BaseNotFoundMsg,
-                @"Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             var selection = pBaseView.Frame.Map.GetSelection("My_Sel", true);
             selection.Color = ColorToUInt(ps.SelectionColor);
-
-            var paternNumber = ConvertToPattern(NumberTextBox.Text);
-            var paternStreet = ConvertToPattern(StreetTextBox.Text);
+            
+            var paternNumber = ConvertToPattern(tbNumber.Text);
+            var paternStreet = ConvertToPattern(tbStreet.Text);
 
             Regex rNum, rStreet;
             try
@@ -99,19 +99,19 @@ namespace GisSelector
                 MessageBox.Show(Resources.BadRegexMsg, @"Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-
-            ResultListbox.Items.Clear();
-            foreach (var city in dataBase.GetCities())
+            
+            ClearResults();
+            foreach (var city in db.GetCities())
             {
                 foreach (var street in city.GetStreets().Where(s => rStreet.IsMatch(s.StreetName)))
                 {
 
-                    foreach (var number in street.GetBuildings().Where(number => rNum.IsMatch(number)))
+                    foreach (var number in street.GetBuildings().Where(n => rNum.IsMatch(n)))
                     {
                         if (city.Name != "Челябинск")
-                            ResultListbox.Items.Add(city.Name + ", " + street.StreetName + ", " + number);
+                            lbResult.Items.Add(city.Name + ", " + street.StreetName + ", " + number);
                         else
-                            ResultListbox.Items.Add(street.StreetName + ", " + number);
+                            lbResult.Items.Add(street.StreetName + ", " + number);
 
                         if (!ps.SelectionHouse) 
                             continue;
@@ -137,16 +137,16 @@ namespace GisSelector
             if (line.Trim() == "")
                 line = ".*";
             else
-                line = "^" + line.Trim();
+                line = "^.*" + line.Trim();
             return line;
         }
 
 
         private void ResultListbox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (ResultListbox.SelectedItem != null)
+            if (lbResult.SelectedItem != null)
             {
-                SelectOnMap(ResultListbox.SelectedItem.ToString());
+                SelectOnMap(lbResult.SelectedItem.ToString());
             }  
 
         }
@@ -161,15 +161,15 @@ namespace GisSelector
             var cmdLine = pBaseView.Factory.ParseCommandLine(cmdLineStr);
             pBaseView.ExecuteCommandLine(cmdLine);
         }
+
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            SearchInDataBase(db);
-            StreetTextBox.Focus();
+            SearchInDataBase();
+            tbStreet.Focus();
         }
 
         private void MainForm_Closing(object sender, FormClosingEventArgs e)
         {
-            ps.FormSize = Size;
             ps.Save();
         }
 
@@ -178,9 +178,9 @@ namespace GisSelector
             return (uint)(((c.A << 24) | (c.R) | (c.G << 8) | c.B << 16) & 0xffffffffL);
         }
 
-        private void ClearButton_Click(object sender, EventArgs e)
+        private void ClearResults()
         {
-            ResultListbox.Items.Clear();
+            lbResult.Items.Clear();
             var sel = pBaseView.Frame.Map.GetSelection("My_Sel", true);
             sel.RemoveAllFeatures();
         }
@@ -257,12 +257,12 @@ namespace GisSelector
         }
         #endregion
 
-        private void NumberTextBox_KeyUp(object sender, KeyEventArgs e)
+        private void TextBox_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyData != Keys.Enter) return;
 
-            SearchInDataBase(db);
-            StreetTextBox.Focus();
+            SearchInDataBase();
+            tbStreet.Focus();
         }
     }
 }

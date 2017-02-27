@@ -33,10 +33,9 @@ namespace GisSelector
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.ResultListbox = new System.Windows.Forms.ListBox();
-            this.NumberTextBox = new System.Windows.Forms.TextBox();
-            this.SearchButton = new System.Windows.Forms.Button();
+            this.lbResult = new System.Windows.Forms.ListBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.MenuSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuSelection = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,50 +49,25 @@ namespace GisSelector
             this.MenuStayOnTop = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuDataBase = new System.Windows.Forms.ToolStripMenuItem();
             this.DBUpdateMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelNumber = new System.Windows.Forms.Label();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.ClearButton = new System.Windows.Forms.Button();
-            this.StreetTextBox = new System.Windows.Forms.TextBox();
-            this.labelStreet = new System.Windows.Forms.Label();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
+            this.tbNumber = new GisSelector.PlaceHolderTextBox();
+            this.tbStreet = new GisSelector.PlaceHolderTextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // ResultListbox
+            // lbResult
             // 
-            this.ResultListbox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ResultListbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.ResultListbox.FormattingEnabled = true;
-            this.ResultListbox.ItemHeight = 20;
-            this.ResultListbox.Location = new System.Drawing.Point(18, 158);
-            this.ResultListbox.Name = "ResultListbox";
-            this.ResultListbox.Size = new System.Drawing.Size(291, 204);
-            this.ResultListbox.TabIndex = 4;
-            this.ResultListbox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ResultListbox_MouseDoubleClick);
-            // 
-            // NumberTextBox
-            // 
-            this.NumberTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.NumberTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.NumberTextBox.Location = new System.Drawing.Point(110, 69);
-            this.NumberTextBox.Name = "NumberTextBox";
-            this.NumberTextBox.Size = new System.Drawing.Size(199, 29);
-            this.NumberTextBox.TabIndex = 1;
-            this.NumberTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.NumberTextBox_KeyUp);
-            // 
-            // SearchButton
-            // 
-            this.SearchButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.SearchButton.Location = new System.Drawing.Point(18, 113);
-            this.SearchButton.Name = "SearchButton";
-            this.SearchButton.Size = new System.Drawing.Size(146, 39);
-            this.SearchButton.TabIndex = 2;
-            this.SearchButton.Text = "Найти";
-            this.SearchButton.UseVisualStyleBackColor = true;
-            this.SearchButton.Click += new System.EventHandler(this.SearchButton_Click);
+            this.lbResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbResult.FormattingEnabled = true;
+            this.lbResult.ItemHeight = 20;
+            this.lbResult.Location = new System.Drawing.Point(12, 89);
+            this.lbResult.Name = "lbResult";
+            this.lbResult.Size = new System.Drawing.Size(296, 284);
+            this.lbResult.TabIndex = 4;
+            this.lbResult.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ResultListbox_MouseDoubleClick);
             // 
             // menuStrip1
             // 
@@ -103,7 +77,7 @@ namespace GisSelector
             this.MenuDataBase});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(322, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(317, 24);
             this.menuStrip1.TabIndex = 9;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -203,22 +177,9 @@ namespace GisSelector
             // DBUpdateMenu
             // 
             this.DBUpdateMenu.Name = "DBUpdateMenu";
-            this.DBUpdateMenu.Size = new System.Drawing.Size(152, 22);
+            this.DBUpdateMenu.Size = new System.Drawing.Size(128, 22);
             this.DBUpdateMenu.Text = "Обновить";
             this.DBUpdateMenu.Click += new System.EventHandler(this.DBUpdateMenu_Click);
-            // 
-            // labelNumber
-            // 
-            this.labelNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelNumber.AutoSize = true;
-            this.labelNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.labelNumber.Location = new System.Drawing.Point(12, 72);
-            this.labelNumber.Name = "labelNumber";
-            this.labelNumber.Size = new System.Drawing.Size(69, 24);
-            this.labelNumber.TabIndex = 10;
-            this.labelNumber.Text = "Номер";
             // 
             // colorDialog1
             // 
@@ -226,55 +187,69 @@ namespace GisSelector
             this.colorDialog1.Color = System.Drawing.Color.Red;
             this.colorDialog1.FullOpen = true;
             // 
-            // ClearButton
+            // btnSearch
             // 
-            this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.ClearButton.Location = new System.Drawing.Point(170, 113);
-            this.ClearButton.Name = "ClearButton";
-            this.ClearButton.Size = new System.Drawing.Size(116, 39);
-            this.ClearButton.TabIndex = 3;
-            this.ClearButton.Text = "Очистить";
-            this.ClearButton.UseVisualStyleBackColor = true;
-            this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
+            this.btnSearch.ImageIndex = 0;
+            this.btnSearch.ImageList = this.imageList;
+            this.btnSearch.Location = new System.Drawing.Point(268, 43);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(40, 40);
+            this.btnSearch.TabIndex = 3;
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.SearchButton_Click);
             // 
-            // StreetTextBox
+            // imageList
             // 
-            this.StreetTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.StreetTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.StreetTextBox.Location = new System.Drawing.Point(110, 34);
-            this.StreetTextBox.Name = "StreetTextBox";
-            this.StreetTextBox.Size = new System.Drawing.Size(199, 29);
-            this.StreetTextBox.TabIndex = 0;
-            this.StreetTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.NumberTextBox_KeyUp);
+            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList.Images.SetKeyName(0, "SearchBtnImg");
             // 
-            // labelStreet
+            // tbNumber
             // 
-            this.labelStreet.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelStreet.AutoSize = true;
-            this.labelStreet.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.labelStreet.Location = new System.Drawing.Point(14, 34);
-            this.labelStreet.Name = "labelStreet";
-            this.labelStreet.Size = new System.Drawing.Size(64, 24);
-            this.labelStreet.TabIndex = 10;
-            this.labelStreet.Text = "Улица";
+            this.tbNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbNumber.ForeColor = System.Drawing.Color.Gray;
+            this.tbNumber.Location = new System.Drawing.Point(156, 49);
+            this.tbNumber.Name = "tbNumber";
+            this.tbNumber.PlaceHolderText = "Номер дома";
+            this.tbNumber.Size = new System.Drawing.Size(106, 26);
+            this.tbNumber.TabIndex = 2;
+            this.tbNumber.Text = "Номер дома";
+            this.tbNumber.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyUp);
+            // 
+            // tbStreet
+            // 
+            this.tbStreet.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbStreet.ForeColor = System.Drawing.Color.Gray;
+            this.tbStreet.Location = new System.Drawing.Point(12, 49);
+            this.tbStreet.Name = "tbStreet";
+            this.tbStreet.PlaceHolderText = "Улица";
+            this.tbStreet.Size = new System.Drawing.Size(138, 26);
+            this.tbStreet.TabIndex = 1;
+            this.tbStreet.Text = "Улица";
+            this.tbStreet.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyUp);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(12, 30);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(101, 16);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Поиск адреса:";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(322, 392);
-            this.Controls.Add(this.ClearButton);
-            this.Controls.Add(this.labelStreet);
-            this.Controls.Add(this.labelNumber);
-            this.Controls.Add(this.StreetTextBox);
-            this.Controls.Add(this.SearchButton);
-            this.Controls.Add(this.NumberTextBox);
-            this.Controls.Add(this.ResultListbox);
+            this.ClientSize = new System.Drawing.Size(317, 385);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btnSearch);
+            this.Controls.Add(this.tbNumber);
+            this.Controls.Add(this.tbStreet);
+            this.Controls.Add(this.lbResult);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
@@ -283,7 +258,7 @@ namespace GisSelector
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "2GisSelector";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_Closing);
-            this.Shown += new System.EventHandler(this.IsMainFormDisplayed);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -293,9 +268,7 @@ namespace GisSelector
 
         #endregion
 
-        private ListBox ResultListbox;
-        private TextBox NumberTextBox;
-        private Button SearchButton;
+        private ListBox lbResult;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem MenuSettings;
         private ToolStripMenuItem MenuSelection;
@@ -309,11 +282,12 @@ namespace GisSelector
         private ToolStripMenuItem MenuStayOnTop;
         private ToolStripMenuItem MenuDataBase;
         private ToolStripMenuItem DBUpdateMenu;
-        private Label labelNumber;
         private ColorDialog colorDialog1;
-        private Button ClearButton;
-        private TextBox StreetTextBox;
-        private Label labelStreet;
+        private PlaceHolderTextBox tbStreet;
+        private PlaceHolderTextBox tbNumber;
+        private Button btnSearch;
+        private ImageList imageList;
+        private Label label1;
     }
 }
 
